@@ -1,16 +1,12 @@
-import "./index.css";
-import 'bootstrap/dist/css/bootstrap.css';
-import Search from "./Search";
-import Overview from "./Overview";
-import Units from "./Units";
+import React from "react";
+import Weather from "./Weather";
+import "./App.css";
 
 export default function App() {
   return (
     <div className="App">
       <div className = "container">
-      <Search />
-      <Overview />
-      <Units />
+        <Weather />
           <footer>
         <p>
           <a href="https://github.com/ebuchanan9/react-weather-app">Open-Source Code</a> by <a
