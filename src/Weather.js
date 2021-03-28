@@ -19,7 +19,6 @@ export default function Weather(props){
             date: new Date(response.data.dt*1000)
         });
     }
-
     function handleSubmit(event){
         event.preventDefault();
         search();
