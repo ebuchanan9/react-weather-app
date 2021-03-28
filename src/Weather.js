@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import "./Weather.css";
 
-export default function Weather(){
-    return(
+export default function Weather(props){
+    const [weatherData, setWeatherData] = useState ({ready:false});
+    function handleResponse(response){
+        setWeatherData({
+            ready:true,
+            temperature: (Math.round(response.data.main.temp)),
+            city:(response.data.name),
+            wind:(response.data.wind.speed),
+            humidity:(response.data.main.humidity),
+            description:(response.data.weather[0].description),
+            icon:(response.data.weather[0].icon),
+            date: newDate(response.data.dt*1000)
+        });
+    }
+    if(weatherData.ready){return(
         <div className ="Weather">
             <form>
                 <div className ="row">
@@ -16,46 +30,49 @@ export default function Weather(){
             </form>
             <h1>Miami</h1>
             <ul>
-                <li> Friday 12:30pm</li>
-                <li> Cloudy</li>
+                <li> {weatherData.date}</li>
+                <li className="text-capitalize"> {weatherData.description}</li>
             </ul>
 <div className="currentInfo">
         <div className="row">
           <div className="col-6">
             <div className="clearfix weather-temperature">
               <img
-                src="https://ssl.gstatic.com/onebox/weather/64/sunny.png"
-                alt="Sunny"
+                src={weatherData.icon}
+                alt={weatherData.description}
                 className="float-start"
                 id="icon"
               ></img>
-              <div className="float-start">
+              <span className="float-start">
                 <strong id="temperature">
-                    70
+                    {weatherData.temperature}
                 </strong>
                 <a href="/" className="active">
                   °F
                 </a>{" "}
                 |<a href="/">°C</a>
+            </span>
             </div>
             </div>
-            </div>
-
         <div className ="col-6">
             <ul>
                 <li>
-                    Humidity:12%
+                    Humidity:{weatherData.humidity}%
                  </li>
-                 <li>
-                    Precipitation: 15%
-                </li>
                 <li>
-                     Wind speed: 4mph
+                     Wind speed: {Math.round(weatherData.wind)}mph
                 </li>
             </ul>
         </div>
         </div>
         </div>
     </div>
-    )
-}
+    );
+}else{
+    const apiKey = "00ccd60e50147aa10fe0e380d859f398";
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=imperial`;
+    axios.get(apiUrl).then(handleResponse);
+    return ("Loading..");
+} }
+
+    
